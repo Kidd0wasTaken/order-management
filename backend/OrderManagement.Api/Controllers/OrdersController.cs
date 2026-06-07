@@ -44,14 +44,9 @@ public class OrdersController(AppDbContext db) : ControllerBase
     [ProducesResponseType(typeof(OrderResponseDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<OrderResponseDto>> Create(
-        [FromBody] CreateOrderDto dto,
+        [FromBody] OrderUpsertDto dto,
         CancellationToken cancellationToken)
     {
-        if (!OrderMapper.TryValidateStatus(dto.Status, out var statusError))
-        {
-            return BadRequest(new { message = statusError });
-        }
-
         var order = dto.ToEntity();
         db.Orders.Add(order);
         await db.SaveChangesAsync(cancellationToken);
@@ -66,14 +61,9 @@ public class OrdersController(AppDbContext db) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<OrderResponseDto>> Update(
         int id,
-        [FromBody] UpdateOrderDto dto,
+        [FromBody] OrderUpsertDto dto,
         CancellationToken cancellationToken)
     {
-        if (!OrderMapper.TryValidateStatus(dto.Status, out var statusError))
-        {
-            return BadRequest(new { message = statusError });
-        }
-
         var order = await db.Orders.FindAsync([id], cancellationToken);
         if (order is null)
         {

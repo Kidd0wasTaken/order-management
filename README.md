@@ -73,6 +73,19 @@ docker compose down -v
 
 Statusuri valide: `Pending`, `Processing`, `Completed`, `Cancelled`
 
+## CI și teste
+
+Pipeline GitHub Actions (`.github/workflows/ci.yml`) rulează automat la push/PR:
+- **Backend:** `dotnet build` + `dotnet test` (6 teste de integrare API)
+- **Frontend:** `npm ci` + `npm run build`
+
+Rulare teste local:
+
+```bash
+cd backend
+dotnet test OrderManagement.sln
+```
+
 ## Dezvoltare locală (fără Docker)
 
 ### Backend

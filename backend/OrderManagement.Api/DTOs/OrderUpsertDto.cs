@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using OrderManagement.Api.Constants;
+using OrderManagement.Api.Validation;
 
 namespace OrderManagement.Api.DTOs;
 
-public class CreateOrderDto
+public class OrderUpsertDto
 {
     [Required(ErrorMessage = "Numele clientului este obligatoriu.")]
     [StringLength(200, ErrorMessage = "Numele clientului nu poate depăși 200 de caractere.")]
@@ -20,6 +21,7 @@ public class CreateOrderDto
     public decimal Price { get; set; }
 
     [Required(ErrorMessage = "Statusul este obligatoriu.")]
+    [ValidOrderStatus]
     public string Status { get; set; } = OrderStatus.Pending;
 
     [StringLength(1000, ErrorMessage = "Notele nu pot depăși 1000 de caractere.")]

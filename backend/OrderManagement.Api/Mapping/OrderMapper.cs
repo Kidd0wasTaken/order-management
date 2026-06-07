@@ -1,4 +1,3 @@
-using OrderManagement.Api.Constants;
 using OrderManagement.Api.DTOs;
 using OrderManagement.Api.Models;
 
@@ -17,7 +16,7 @@ public static class OrderMapper
             order.Notes,
             order.CreatedAt);
 
-    public static Order ToEntity(this CreateOrderDto dto) =>
+    public static Order ToEntity(this OrderUpsertDto dto) =>
         new()
         {
             CustomerName = dto.CustomerName.Trim(),
@@ -29,7 +28,7 @@ public static class OrderMapper
             CreatedAt = DateTime.UtcNow
         };
 
-    public static void ApplyUpdate(this Order order, UpdateOrderDto dto)
+    public static void ApplyUpdate(this Order order, OrderUpsertDto dto)
     {
         order.CustomerName = dto.CustomerName.Trim();
         order.Product = dto.Product.Trim();
@@ -37,17 +36,5 @@ public static class OrderMapper
         order.Price = dto.Price;
         order.Status = dto.Status;
         order.Notes = string.IsNullOrWhiteSpace(dto.Notes) ? null : dto.Notes.Trim();
-    }
-
-    public static bool TryValidateStatus(string status, out string? error)
-    {
-        if (OrderStatus.IsValid(status))
-        {
-            error = null;
-            return true;
-        }
-
-        error = $"Status invalid. Valori permise: {string.Join(", ", OrderStatus.All)}.";
-        return false;
     }
 }
