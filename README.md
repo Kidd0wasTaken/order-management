@@ -130,6 +130,22 @@ order-management/
 - **Migrări EF** aplicate automat la pornirea backend-ului
 - **UI în română** — etichete și mesaje localizate; valorile status în API rămân în engleză (convenție REST)
 
+## Publicare pe GitHub
+
+Repository-ul local este inițializat pe branch-ul `main`. Pentru a crea repo-ul remote:
+
+```bash
+gh auth login
+gh repo create order-management --public --description "Aplicație full-stack de gestionare comenzi" --source=. --remote=origin --push
+```
+
+Alternativ, creați manual repo-ul pe GitHub și rulați:
+
+```bash
+git remote add origin https://github.com/<utilizator>/order-management.git
+git push -u origin main
+```
+
 ## Licență
 
 Proiect demonstrativ pentru evaluare tehnică.
