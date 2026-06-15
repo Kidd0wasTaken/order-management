@@ -16,16 +16,36 @@ services:
       retries: 10
       start_period: 10s
 
+  dukintegrator:
+    build: ./backend/dukintegrator
+    environment:
+      DUK_JAR_PATH: /opt/duk/dist/DUKIntegrator.jar
+    volumes:
+      - d100_exports:/exports
+      - ./backend/dukintegrator/jar:/opt/duk
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8080/health')\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
   backend:
     build: ./backend
     environment:
       ASPNETCORE_ENVIRONMENT: Production
       ASPNETCORE_URLS: http://+:5000
       ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=orders_db;Username=postgres;Password=postgres
+      D100__DukIntegratorUrl: http://dukintegrator:8080
+      D100__ExportRoot: /exports
     ports:
       - "5000:5000"
+    volumes:
+      - d100_exports:/exports
     depends_on:
       db:
+        condition: service_healthy
+      dukintegrator:
         condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
@@ -44,3 +64,4 @@ services:
 
 volumes:
   pgdata:
+  d100_exports:

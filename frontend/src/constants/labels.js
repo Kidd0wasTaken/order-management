@@ -1,5 +1,7 @@
 export const labels = {
   appTitle: 'Gestionare Comenzi',
+  ordersTab: 'Comenzi',
+  ordersTitle: 'Comenzi',
   addOrder: 'Adaugă comandă',
   editOrder: 'Editează comandă',
   newOrder: 'Comandă nouă',

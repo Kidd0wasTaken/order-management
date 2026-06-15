@@ -1,11 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using OrderManagement.Api.Configuration;
 using OrderManagement.Api.Data;
+using OrderManagement.Api.Services.D100;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.Configure<D100Options>(builder.Configuration.GetSection(D100Options.SectionName));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -18,6 +22,12 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>();
+
+builder.Services.AddScoped<D100CalculationService>();
+builder.Services.AddSingleton<D100XmlBuilder>();
+builder.Services.AddSingleton<XsdValidator>();
+builder.Services.AddSingleton<D100ExportStorage>();
+builder.Services.AddHttpClient<DukIntegratorService>();
 
 var app = builder.Build();
 
